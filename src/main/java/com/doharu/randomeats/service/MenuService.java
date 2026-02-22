@@ -1,5 +1,6 @@
 package com.doharu.randomeats.service;
 
+import com.doharu.randomeats.domain.Category;
 import com.doharu.randomeats.domain.Menu;
 import com.doharu.randomeats.repository.MenuRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,11 +22,15 @@ public class MenuService {
     }
 
     // 랜덤 메뉴 추천
-    public Menu getRandomMenu() {
-        List<Menu> menus = menuRepository.findAll();
+    public Menu getRandomMenuByCategories(List<Category> categories) {
+        if (categories == null || categories.isEmpty()) {
+            throw new IllegalArgumentException("카테고리를 하나 이상 선택해야 합니다.");
+        }
+
+        List<Menu> menus = menuRepository.findByCategoryIn(categories);
 
         if (menus.isEmpty()) {
-            throw new IllegalStateException("등록된 메뉴가 없습니다.");
+            throw new IllegalStateException("선택한 카테고리에 등록된 메뉴가 없습니다.");
         }
 
         int randomIndex = random.nextInt(menus.size());
