@@ -17,7 +17,7 @@ public class MenuService {
     private final Random random = new Random();
 
     // 전체 메뉴 조회
-    public List<Menu> getAllMenu() {
+    public List<Menu> getAllMenus() {
         return menuRepository.findAll();
     }
 

@@ -26,7 +26,7 @@ class MenuServiceTest {
 
     @Test
     @DisplayName("전체 메뉴 조회")
-    void getAllMenu() {
+    void getAllMenus() {
         // given
         List<Menu> menus = List.of(
                 new Menu("비빔밥", Category.KOREAN, "url1"),
@@ -35,7 +35,7 @@ class MenuServiceTest {
         given(menuRepository.findAll()).willReturn(menus);
 
         // when
-        List<Menu> result = menuService.getAllMenu();
+        List<Menu> result = menuService.getAllMenus();
 
         // then
         assertThat(result).hasSize(2);
