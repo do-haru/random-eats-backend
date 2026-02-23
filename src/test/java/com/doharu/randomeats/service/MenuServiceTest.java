@@ -2,6 +2,8 @@ package com.doharu.randomeats.service;
 
 import com.doharu.randomeats.domain.Category;
 import com.doharu.randomeats.domain.Menu;
+import com.doharu.randomeats.exception.InvalidCategoryException;
+import com.doharu.randomeats.exception.NoMenuFoundException;
 import com.doharu.randomeats.repository.MenuRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -68,7 +70,7 @@ class MenuServiceTest {
         // when & then
         assertThatThrownBy(() ->
                 menuService.getRandomMenuByCategories(List.of()))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(InvalidCategoryException.class)
                 .hasMessage("카테고리를 하나 이상 선택해야 합니다.");
     }
 
@@ -84,7 +86,7 @@ class MenuServiceTest {
         // when & then
         assertThatThrownBy(() ->
                 menuService.getRandomMenuByCategories(categories))
-                .isInstanceOf(IllegalStateException.class)
+                .isInstanceOf(NoMenuFoundException.class)
                 .hasMessage("선택한 카테고리에 등록된 메뉴가 없습니다.");
     }
 }
