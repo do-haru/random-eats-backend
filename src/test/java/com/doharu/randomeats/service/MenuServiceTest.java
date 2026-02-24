@@ -83,6 +83,15 @@ class MenuServiceTest {
     }
 
     @Test
+    @DisplayName("카테고리가 null이면 예외 발생")
+    void nullCategoryThrowsException() {
+        assertThatThrownBy(() ->
+                menuService.getRandomMenuByCategories(null))
+                .isInstanceOf(InvalidCategoryException.class)
+                .hasMessage("카테고리를 하나 이상 선택해야 합니다.");
+    }
+
+    @Test
     @DisplayName("선택된 카테고리에 메뉴가 없으면 예외 발생")
     void getRandomMenuByCategoriesThrowsException() {
         // given
