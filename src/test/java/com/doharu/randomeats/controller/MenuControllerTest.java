@@ -51,6 +51,7 @@ class MenuControllerTest {
                 .andExpect(jsonPath("$[0].category").value("KOREAN"))
                 .andExpect(jsonPath("$[0].imageUrl").value("url1"));
 
+        verify(menuService).getAllMenus();
     }
 
     @Test
@@ -69,6 +70,7 @@ class MenuControllerTest {
                 .andExpect(jsonPath("$.category").value("KOREAN"))
                 .andExpect(jsonPath("$.imageUrl").value("url1"));
 
+        verify(menuService).getRandomMenuByCategories(List.of(Category.KOREAN));
     }
 
     @Test
@@ -81,7 +83,9 @@ class MenuControllerTest {
         mockMvc.perform(post("/api/menus/random")
                         .contentType("application/json")
                         .content("[]"))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.message").value("카테고리를 하나 이상 선택해야 합니다."));
     }
 
     @Test
@@ -95,6 +99,9 @@ class MenuControllerTest {
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(
                                 List.of(Category.KOREAN))))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.message")
+                        .value("선택한 카테고리에 등록된 메뉴가 없습니다."));
     }
 }
