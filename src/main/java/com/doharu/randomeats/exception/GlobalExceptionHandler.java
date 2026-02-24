@@ -13,21 +13,21 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NoMenuFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public Map<String, Object> handleNoMenuFound(NoMenuFoundException e) {
-        return Map.of(
-                "timestamp", LocalDateTime.now(),
-                "status", 404,
-                "message", e.getMessage()
+    public ErrorResponse handleNoMenuFound(NoMenuFoundException e) {
+        return new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.NOT_FOUND.value(),
+                e.getMessage()
         );
     }
 
     @ExceptionHandler(InvalidCategoryException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, Object> handleInvalidCategory(InvalidCategoryException e) {
-        return Map.of(
-                "timestamp", LocalDateTime.now(),
-                "status", 400,
-                "message", e.getMessage()
+    public ErrorResponse handleInvalidCategory(InvalidCategoryException e) {
+        return new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                e.getMessage()
         );
     }
 }
