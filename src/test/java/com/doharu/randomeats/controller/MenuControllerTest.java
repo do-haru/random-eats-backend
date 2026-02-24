@@ -2,6 +2,7 @@ package com.doharu.randomeats.controller;
 
 import com.doharu.randomeats.domain.Category;
 import com.doharu.randomeats.domain.Menu;
+import com.doharu.randomeats.dto.MenuResponseDto;
 import com.doharu.randomeats.exception.GlobalExceptionHandler;
 import com.doharu.randomeats.exception.InvalidCategoryException;
 import com.doharu.randomeats.exception.NoMenuFoundException;
@@ -38,31 +39,36 @@ class MenuControllerTest {
     @DisplayName("전체 메뉴 조회 성공")
     void getAllMenus() throws Exception{
 
-        List<Menu> menus = List.of(
-                new Menu("비빔밥", Category.KOREAN, "url1")
+        List<MenuResponseDto> dtos = List.of(
+                new MenuResponseDto("비빔밥", "KOREAN", "url1")
         );
 
-        given(menuService.getAllMenus()).willReturn(menus);
+        given(menuService.getAllMenus()).willReturn(dtos);
 
         mockMvc.perform(get("/api/menus"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].name").value("비빔밥"));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].name").value("비빔밥"))
+                .andExpect(jsonPath("$[0].category").value("KOREAN"))
+                .andExpect(jsonPath("$[0].imageUrl").value("url1"));
 
     }
 
     @Test
     @DisplayName("랜점 메뉴 추천 성공")
     void getRandomMenu() throws Exception {
-        Menu menu = new Menu("비빔밥", Category.KOREAN, "url1");
+        MenuResponseDto dto = new MenuResponseDto("비빔밥", "KOREAN", "url1");
 
-        given(menuService.getRandomMenuByCategories(List.of(Category.KOREAN))).willReturn(menu);
+        given(menuService.getRandomMenuByCategories(List.of(Category.KOREAN))).willReturn(dto);
 
         mockMvc.perform(post("/api/menus/random")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(
                                 List.of(Category.KOREAN))))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("비빔밥"));
+                .andExpect(jsonPath("$.name").value("비빔밥"))
+                .andExpect(jsonPath("$.category").value("KOREAN"))
+                .andExpect(jsonPath("$.imageUrl").value("url1"));
 
     }
 

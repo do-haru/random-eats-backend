@@ -2,6 +2,7 @@ package com.doharu.randomeats.service;
 
 import com.doharu.randomeats.domain.Category;
 import com.doharu.randomeats.domain.Menu;
+import com.doharu.randomeats.dto.MenuResponseDto;
 import com.doharu.randomeats.exception.InvalidCategoryException;
 import com.doharu.randomeats.exception.NoMenuFoundException;
 import com.doharu.randomeats.repository.MenuRepository;
@@ -37,10 +38,14 @@ class MenuServiceTest {
         given(menuRepository.findAll()).willReturn(menus);
 
         // when
-        List<Menu> result = menuService.getAllMenus();
+        List<MenuResponseDto> result = menuService.getAllMenus();
 
         // then
         assertThat(result).hasSize(2);
+        assertThat(result.get(0).getName()).isEqualTo("비빔밥");
+        assertThat(result.get(0).getCategory()).isEqualTo("KOREAN");
+        assertThat(result.get(0).getImageUrl()).isEqualTo("url1");
+
         verify(menuRepository).findAll();
     }
 
@@ -57,10 +62,13 @@ class MenuServiceTest {
                 .willReturn(menus);
 
         // when
-        Menu result = menuService.getRandomMenuByCategories(categories);
+        MenuResponseDto result = menuService.getRandomMenuByCategories(categories);
 
         //then
         assertThat(result.getName()).isEqualTo("비빔밥");
+        assertThat(result.getCategory()).isEqualTo("KOREAN");
+        assertThat(result.getImageUrl()).isEqualTo("url1");
+
         verify(menuRepository).findByCategoryIn(categories);
     }
 

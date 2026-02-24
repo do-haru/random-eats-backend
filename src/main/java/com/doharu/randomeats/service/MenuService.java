@@ -2,6 +2,7 @@ package com.doharu.randomeats.service;
 
 import com.doharu.randomeats.domain.Category;
 import com.doharu.randomeats.domain.Menu;
+import com.doharu.randomeats.dto.MenuResponseDto;
 import com.doharu.randomeats.exception.InvalidCategoryException;
 import com.doharu.randomeats.exception.NoMenuFoundException;
 import com.doharu.randomeats.repository.MenuRepository;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -19,12 +21,15 @@ public class MenuService {
     private final Random random = new Random();
 
     // 전체 메뉴 조회
-    public List<Menu> getAllMenus() {
-        return menuRepository.findAll();
+    public List<MenuResponseDto> getAllMenus() {
+        return menuRepository.findAll()
+                .stream()
+                .map(MenuResponseDto::from)
+                .collect(Collectors.toList());
     }
 
     // 랜덤 메뉴 추천
-    public Menu getRandomMenuByCategories(List<Category> categories) {
+    public MenuResponseDto getRandomMenuByCategories(List<Category> categories) {
         if (categories == null || categories.isEmpty()) {
             throw new InvalidCategoryException("카테고리를 하나 이상 선택해야 합니다.");
         }
@@ -36,6 +41,8 @@ public class MenuService {
         }
 
         int randomIndex = random.nextInt(menus.size());
-        return menus.get(randomIndex);
+        Menu selectMenu = menus.get(randomIndex);
+
+        return MenuResponseDto.from(selectMenu);
     }
 }
