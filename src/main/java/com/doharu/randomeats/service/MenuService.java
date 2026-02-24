@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 public class MenuService {
 
     private final MenuRepository menuRepository;
-    private final Random random = new Random();
 
     // 전체 메뉴 조회
     public List<MenuResponseDto> getAllMenus() {
@@ -40,7 +39,7 @@ public class MenuService {
             throw new NoMenuFoundException("선택한 카테고리에 등록된 메뉴가 없습니다.");
         }
 
-        int randomIndex = random.nextInt(menus.size());
+        int randomIndex = ThreadLocalRandom.current().nextInt(menus.size());
         Menu selectMenu = menus.get(randomIndex);
 
         return MenuResponseDto.from(selectMenu);
