@@ -47,7 +47,6 @@ class MenuControllerTest {
 
         mockMvc.perform(get("/api/menus"))
                 .andExpect(status().isOk())
-                .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].name").value("비빔밥"))
                 .andExpect(jsonPath("$[0].category").value("KOREAN"))
                 .andExpect(jsonPath("$[0].imageUrl").value("url1"));
