@@ -37,4 +37,20 @@ class MenuRepositoryTest {
         assertThat(result.getFirst().getCategory()).isEqualTo(menu.getCategory());
         assertThat(result.getFirst().getImageUrl()).isEqualTo(menu.getImageUrl());
     }
+
+    @Test
+    @DisplayName("카테고리로 메뉴 조회")
+    void findByCategoryIn() {
+        // given
+        Menu korean = new Menu("비빔밥", Category.KOREAN, "url1");
+        Menu japanese = new Menu("초밥", Category.JAPANESE, "url2");
+        menuRepository.saveAll(List.of(korean, japanese));
+
+        // when
+        List<Menu> result = menuRepository.findByCategoryIn(List.of(Category.KOREAN));
+
+        // then
+        assertThat(result).hasSize(1);
+        assertThat(result.get(0).getCategory()).isEqualTo(Category.KOREAN);
+    }
 }
